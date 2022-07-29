@@ -1,3 +1,9 @@
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.time.Duration
+import java.net.URI
+import java.net.http.HttpResponse
+
 plugins {
     `java-library`
     `maven-publish`
@@ -60,6 +66,49 @@ subprojects {
         }
     }
 
+    tasks.withType<GenerateMavenPom>().all {
+        doLast {
+            val file = File("$buildDir/publications/gpr/pom-default.xml")
+            var text = file.readText()
+            val regex =
+                "(?s)(<dependencyManagement>.+?<dependencies>)(.+?)(</dependencies>.+?</dependencyManagement>)".toRegex()
+            val matcher = regex.find(text)
+            if (matcher != null) {
+                text = regex.replaceFirst(text, "")
+                val firstDeps = matcher.groups[2]!!.value
+                text = regex.replaceFirst(text, "$1$2$firstDeps$3")
+            }
+            file.writeText(text)
+        }
+    }
+
+    val token = project.findProperty("gpr.token") as String? ?: System.getenv("GITHUB_TOKEN")
+
+    task("checkForExistingArtifact") {
+        group = "publishing"
+        doLast {
+            val url =
+                "https://maven.pkg.github.com/alesharik/spring-baseinfra/com/alesharik/spring/${project.name}/${project.version}/${project.name}-${project.version}.pom"
+            val client = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(20))
+                .build()
+            val request = HttpRequest.newBuilder()
+                .method("HEAD", HttpRequest.BodyPublishers.noBody())
+                .uri(URI.create(url))
+                .header("Authorization", "Bearer $token")
+                .build()
+            val response = client.send(request, HttpResponse.BodyHandlers.discarding()).statusCode()
+            if (response == 401) {
+                throw RuntimeException("Unauthorized gh maven user. Please provide valid token")
+            }
+            if (response == 200) {
+                gradle.taskGraph.allTasks.find {
+                    it.project == project && it.name == "publishGprPublicationToGitHubPackagesRepository"
+                }?.enabled = false
+            }
+        }
+    }
+
     publishing {
         repositories {
             maven {
@@ -67,7 +116,7 @@ subprojects {
                 url = uri("https://maven.pkg.github.com/alesharik/spring-baseinfra")
                 credentials(HttpHeaderCredentials::class) {
                     name = "Authorization"
-                    value = "Bearer ${project.findProperty("gpr.token") as String? ?: System.getenv("GITHUB_TOKEN")}"
+                    value = "Bearer $token"
                 }
                 authentication {
                     create<HttpHeaderAuthentication>("header")
@@ -76,8 +125,13 @@ subprojects {
         }
         publications {
             create<MavenPublication>("gpr") {
+                groupId = "com.alesharik.spring"
                 from(components["java"])
             }
         }
+    }
+
+    tasks.withType<PublishToMavenRepository>().all {
+        dependsOn("checkForExistingArtifact")
     }
 }
