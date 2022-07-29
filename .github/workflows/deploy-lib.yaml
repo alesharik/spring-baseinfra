@@ -1,0 +1,19 @@
+name: Deploy device-api lib
+on:
+  push:
+jobs:
+  publish-maven:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: adopt
+          java-version: 17
+      - name: Run tests
+        run: ./gradlew test
+      - name: Build and publish package
+        run: ./gradlew publishGprPublicationToGitHubPackagesRepository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

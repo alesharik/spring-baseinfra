@@ -1,0 +1,41 @@
+[plugins]
+spring-deps = { id = "io.spring.dependency-management", version = "1.0.12.RELEASE" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version = "1.7.0" }
+
+[versions]
+spring-boot = "2.7.1"
+
+assertj = "3.11.1"
+mockito = "4.2.0"
+springdoc = "1.6.9"
+problems = "0.27.0"
+tika = "2.3.0"
+minio = "8.3.8"
+okhttp = "4.8.1"
+sentry = "6.2.1"
+
+[libraries]
+spring-boot-dependencies = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot" }
+spring-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
+spring-starter-sentry = { group = "io.sentry", name = "sentry-spring-boot-starter", version.ref = "sentry" }
+spring-configuration-processor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
+spring-boot = { group = "org.springframework.boot", name = "spring-boot" }
+spring-boot-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure" }
+spring-web = { group = "org.springframework", name = "spring-web" }
+
+lombok = { group = "org.projectlombok", name = "lombok" }
+tika-core = { group = "org.apache.tika", name = "tika-core", version.ref = "tika" }
+minio = { group = "io.minio", name = "minio", version.ref = "minio" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+
+assertj = { group = "org.assertj", name = "assertj-core", version.ref = "assertj" }
+mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+
+springdoc-ui = { group = "org.springdoc", name = "springdoc-openapi-ui", version.ref = "springdoc" }
+springdoc-mvc = { group = "org.springdoc", name = "springdoc-openapi-webmvc-core", version.ref = "springdoc" }
+springdoc-kotlin = { group = "org.springdoc", name = "springdoc-openapi-kotlin", version.ref = "springdoc" }
+
+problems-web = { group = "org.zalando", name = "problem-spring-web-starter", version.ref = "problems" }
+
+[bundles]
+springdoc = ["springdoc-ui", "springdoc-mvc", "springdoc-kotlin"]

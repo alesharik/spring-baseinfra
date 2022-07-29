@@ -1,0 +1,44 @@
+package com.alesharik.spring.file.storage.verifier;
+
+import com.alesharik.spring.file.storage.FileTypeVerifier;
+import org.springframework.lang.NonNull;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.file.Path;
+
+/**
+ * This verifies pass only JPEG images
+ */
+public class JpegVerifier implements FileTypeVerifier {
+    private static final String JPG_EXTENSION = ".jpg";
+    private static final String JPEG_EXTENSION = ".jpeg";
+
+    @Override
+    public boolean verifyFile(@NonNull Path path, @NonNull MultipartFile original) {
+        if (original.getOriginalFilename() == null)
+            return false;
+        if (!(original.getOriginalFilename().endsWith(JPEG_EXTENSION) || original.getOriginalFilename().endsWith(JPG_EXTENSION)))
+            return false;
+        try {
+            return isJpeg(path.toFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    private boolean isJpeg(File file) throws IOException {
+        var raf = new RandomAccessFile(file, "r");
+        byte[] tmp = new byte[3];
+        raf.readFully(tmp);
+        if (tmp[0] != (byte) 0xFF || tmp[1] != (byte) 0xD8 || tmp[2] != (byte) 0xFF)
+            return false;
+        raf.seek(raf.length() - 2);
+        byte[] tmp1 = new byte[2];
+        raf.readFully(tmp1);
+        return tmp1[0] == (byte) 0xFF && tmp1[1] == (byte) 0xD9;
+    }
+}
