@@ -3,6 +3,7 @@ import java.net.http.HttpRequest
 import java.time.Duration
 import java.net.URI
 import java.net.http.HttpResponse
+import java.util.Properties
 
 plugins {
     `java-library`
@@ -14,7 +15,7 @@ plugins {
 group = "com.alesharik.spring"
 version = "1.0-SNAPSHOT"
 
-val localProperties = java.util.Properties()
+val localProperties = Properties()
 if (rootProject.file("local.properties").exists()) {
     localProperties.load(rootProject.file("local.properties").inputStream())
 }
