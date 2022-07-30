@@ -75,7 +75,7 @@ subprojects {
     tasks.withType<GenerateMavenPom>().all {
         doLast {
             val file = File("$buildDir/publications/gpr/pom-default.xml")
-            var text = file.readText()
+            var text = file.readText().replace("<dependencies/>", "<dependencies> </dependencies>")
             val regex =
                 "(?s)(<dependencyManagement>.+?<dependencies>)(.+?)(</dependencies>.+?</dependencyManagement>)".toRegex()
             val matcher = regex.find(text)
