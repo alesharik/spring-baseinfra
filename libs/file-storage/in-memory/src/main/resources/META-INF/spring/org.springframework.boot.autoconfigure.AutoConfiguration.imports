@@ -1,1 +1,1 @@
-InMemoryFileStorageConfiguration
+com.alesharik.spring.file.storage.local.selfhosted.InMemoryFileStorageConfiguration

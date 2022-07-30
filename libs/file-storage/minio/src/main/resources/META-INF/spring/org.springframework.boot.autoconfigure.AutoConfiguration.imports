@@ -1,1 +1,1 @@
-MinioFileStorageConfiguration
+com.alesharik.spring.file.storage.minio.MinioFileStorageConfiguration
