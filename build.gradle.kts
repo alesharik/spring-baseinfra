@@ -14,6 +14,11 @@ plugins {
 group = "com.alesharik.spring"
 version = "1.0-SNAPSHOT"
 
+val localProperties = java.util.Properties()
+if (rootProject.file("local.properties").exists()) {
+    localProperties.load(rootProject.file("local.properties").inputStream())
+}
+
 repositories {
     mavenCentral()
 }
@@ -82,7 +87,7 @@ subprojects {
         }
     }
 
-    val token = project.findProperty("gpr.token") as String? ?: System.getenv("GITHUB_TOKEN")
+    val token = localProperties["gpr.token"] as String? ?: System.getenv("GITHUB_TOKEN")
 
     task("checkForExistingArtifact") {
         group = "publishing"
