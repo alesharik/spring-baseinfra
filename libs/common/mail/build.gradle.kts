@@ -1,7 +1,7 @@
-version = "1.0.0"
+version = "1.0.1"
 
 dependencies {
-    implementation(libs.spring.starter.mail)
+    api(libs.spring.starter.mail)
     implementation(libs.spring.boot.autoconfigure)
-    implementation(libs.bundles.thymeleaf)
+    api(libs.bundles.thymeleaf)
 }
