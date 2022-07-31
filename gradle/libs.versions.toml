@@ -13,10 +13,17 @@ tika = "2.3.0"
 minio = "8.3.8"
 okhttp = "4.8.1"
 sentry = "6.2.1"
+swagger = "2.1.11"
+thymeleaf = "3.0.15.RELEASE"
+bouncycastle = "1.70"
 
 [libraries]
 spring-boot-dependencies = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot" }
 spring-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
+spring-starter-mail = { group = "org.springframework.boot", name = "spring-boot-starter-mail" }
+spring-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+spring-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
+spring-starter-oauth2-resource-server = { group = "org.springframework.boot", name = "spring-boot-starter-oauth2-resource-server" }
 spring-starter-sentry = { group = "io.sentry", name = "sentry-spring-boot-starter", version.ref = "sentry" }
 spring-configuration-processor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
 spring-boot = { group = "org.springframework.boot", name = "spring-boot" }
@@ -27,6 +34,7 @@ lombok = { group = "org.projectlombok", name = "lombok" }
 tika-core = { group = "org.apache.tika", name = "tika-core", version.ref = "tika" }
 minio = { group = "io.minio", name = "minio", version.ref = "minio" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+bouncycastle = { group = "org.bouncycastle", name = "bcpkix-jdk15on", version.ref = "bouncycastle" }
 
 assertj = { group = "org.assertj", name = "assertj-core", version.ref = "assertj" }
 mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
@@ -35,7 +43,12 @@ springdoc-ui = { group = "org.springdoc", name = "springdoc-openapi-ui", version
 springdoc-mvc = { group = "org.springdoc", name = "springdoc-openapi-webmvc-core", version.ref = "springdoc" }
 springdoc-kotlin = { group = "org.springdoc", name = "springdoc-openapi-kotlin", version.ref = "springdoc" }
 
+swagger-annotations = { group = "io.swagger.core.v3", name = "swagger-annotations", version.ref = "swagger" }
 problems-web = { group = "org.zalando", name = "problem-spring-web-starter", version.ref = "problems" }
+
+thymeleaf-core = { group = "org.thymeleaf", name = "thymeleaf", version.ref = "thymeleaf" }
+thymeleaf-spring = { group = "org.thymeleaf", name = "thymeleaf-spring5", version.ref = "thymeleaf" }
 
 [bundles]
 springdoc = ["springdoc-ui", "springdoc-mvc", "springdoc-kotlin"]
+thymeleaf = ["thymeleaf-core", "thymeleaf-spring"]

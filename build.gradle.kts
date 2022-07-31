@@ -56,6 +56,7 @@ subprojects {
         annotationProcessor(platform(libs.spring.boot.dependencies))
         annotationProcessor(libs.lombok)
         annotationProcessor(libs.spring.configuration.processor)
+        testImplementation(libs.spring.starter.test)
         testImplementation(libs.assertj)
         testImplementation(libs.mockito)
     }
