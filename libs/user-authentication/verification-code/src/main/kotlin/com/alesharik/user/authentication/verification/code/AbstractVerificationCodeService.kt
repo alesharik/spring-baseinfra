@@ -18,7 +18,7 @@ abstract class AbstractVerificationCodeService<T: VerificationCodeEntityBase, R>
 
     protected abstract fun sendCode(code: VerificationCode, to: R)
 
-    fun ensureVerificationSuccessful(
+    open fun ensureVerificationSuccessful(
         code: String?,
         auth: T,
         recipientInfo: R
@@ -53,13 +53,17 @@ abstract class AbstractVerificationCodeService<T: VerificationCodeEntityBase, R>
         saveAuth(auth)
     }
 
-    fun sendCode(auth: T, recipientInfo: R) {
+    protected open fun generateCode(recipient: R): VerificationCode {
+        return verificationCodeGenerator.generate()
+    }
+
+    open fun sendCode(auth: T, recipientInfo: R) {
         val lastSentTime = auth.lastSentTime
         if (lastSentTime != null && lastSentTime.plus(properties.verificationCodeSendTimeout)
                 .isAfter(ZonedDateTime.now())
         )
             throw VerificationSentTooFastException()
-        val code = verificationCodeGenerator.generate()
+        val code = generateCode(recipientInfo)
         auth.verificationCode = code.code
         auth.verificationCodeExpires = code.expires
         auth.lastSentTime = ZonedDateTime.now()
