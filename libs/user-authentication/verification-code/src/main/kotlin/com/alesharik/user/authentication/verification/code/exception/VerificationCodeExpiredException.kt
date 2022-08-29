@@ -1,31 +1,23 @@
-package com.alesharik.user.authentication.verification.code.exception;
+package com.alesharik.user.authentication.verification.code.exception
 
-import org.zalando.problem.Status;
-import org.zalando.problem.StatusType;
-import org.zalando.problem.ThrowableProblem;
+import org.zalando.problem.Exceptional
+import org.zalando.problem.Status
+import org.zalando.problem.StatusType
+import org.zalando.problem.ThrowableProblem
+import java.net.URI
 
-import java.net.URI;
+class VerificationCodeExpiredException : ThrowableProblem() {
+    override fun getCause(): Exceptional? = super.cause
 
-public class VerificationCodeExpiredException extends ThrowableProblem {
-    public static final URI TYPE = URI.create("https://spring.alesharik.com/docs/error/auth/verification-code-expired");
+    override fun getType(): URI = TYPE
 
-    @Override
-    public URI getType() {
-        return TYPE;
-    }
+    override fun getTitle(): String = "Verification code expired"
 
-    @Override
-    public String getTitle() {
-        return "Verification code expired";
-    }
+    override fun getDetail(): String = "You should send another verification code request"
 
-    @Override
-    public String getDetail() {
-        return "You should send another verification code request";
-    }
+    override fun getStatus(): StatusType = Status.BAD_REQUEST
 
-    @Override
-    public StatusType getStatus() {
-        return Status.BAD_REQUEST;
+    companion object {
+        val TYPE = URI.create("https://spring.alesharik.com/docs/error/auth/verification-code-expired")
     }
 }

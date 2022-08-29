@@ -1,31 +1,23 @@
-package com.alesharik.user.authentication.verification.code.exception;
+package com.alesharik.user.authentication.verification.code.exception
 
-import org.zalando.problem.Status;
-import org.zalando.problem.StatusType;
-import org.zalando.problem.ThrowableProblem;
+import org.zalando.problem.Exceptional
+import org.zalando.problem.Status
+import org.zalando.problem.StatusType
+import org.zalando.problem.ThrowableProblem
+import java.net.URI
 
-import java.net.URI;
+class VerificationCodeNotRequestedException : ThrowableProblem() {
+    override fun getCause(): Exceptional? = super.cause
 
-public class VerificationCodeNotRequestedException extends ThrowableProblem {
-    public static final URI TYPE = URI.create("https://spring.alesharik.com/docs/error/auth/verification-code-not-requested");
+    override fun getType(): URI = TYPE
 
-    @Override
-    public URI getType() {
-        return TYPE;
-    }
+    override fun getTitle(): String = "Verification code not requested"
 
-    @Override
-    public String getTitle() {
-        return "Verification code not requested";
-    }
+    override fun getDetail(): String = "You should request verification code from your auth handler"
 
-    @Override
-    public String getDetail() {
-        return "You should request verification code from your auth handler";
-    }
+    override fun getStatus(): StatusType = Status.BAD_REQUEST
 
-    @Override
-    public StatusType getStatus() {
-        return Status.BAD_REQUEST;
+    companion object {
+        val TYPE = URI.create("https://spring.alesharik.com/docs/error/auth/verification-code-not-requested")
     }
 }
