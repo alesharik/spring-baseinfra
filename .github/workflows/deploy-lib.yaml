@@ -13,7 +13,11 @@ jobs:
           java-version: 17
       - name: Run tests
         run: ./gradlew test
-      - name: Build and publish package
+      - name: Build and publish package to github
         run: ./gradlew publishGprPublicationToGitHubPackagesRepository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and publish package to nexus
+        run: ./gradlew publishGprPublicationToNexusRepository
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

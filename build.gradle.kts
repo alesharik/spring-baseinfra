@@ -129,6 +129,18 @@ subprojects {
                     create<HttpHeaderAuthentication>("header")
                 }
             }
+            val user = System.getenv("CI_USERNAME")
+            val pass = System.getenv("CI_PASSWORD")
+            if (user != null && pass != null) {
+                maven {
+                    name = "Nexus"
+                    url = uri("https://nexus.alesharik.com/repository/maven-public/")
+                    credentials {
+                        username = user
+                        password = pass
+                    }
+                }
+            }
         }
         publications {
             create<MavenPublication>("gpr") {
