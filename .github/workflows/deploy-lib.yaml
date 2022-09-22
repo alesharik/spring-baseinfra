@@ -20,4 +20,5 @@ jobs:
       - name: Build and publish package to nexus
         run: ./gradlew publishGprPublicationToNexusRepository
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CI_USERNAME: ${{ secrets.CI_USERNAME }}
+          CI_PASSWORD: ${{ secrets.CI_PASSWORD }}
