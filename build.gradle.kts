@@ -150,7 +150,5 @@ subprojects {
         }
     }
 
-    tasks.withType<PublishToMavenRepository>().all {
-        dependsOn("checkForExistingArtifact")
-    }
+    tasks.findByName("publishGprPublicationToGitHubPackagesRepository")?.dependsOn("checkForExistingArtifact")
 }
