@@ -134,7 +134,7 @@ subprojects {
             if (user != null && pass != null) {
                 maven {
                     name = "Nexus"
-                    url = uri("https://nexus.alesharik.com/repository/maven-public/")
+                    url = uri("https://nexus.alesharik.com/repository/maven-releases/")
                     credentials {
                         username = user
                         password = pass
