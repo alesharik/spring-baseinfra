@@ -10,6 +10,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -43,9 +44,14 @@ public class EmailService {
         try {
             var helper = new MimeMessageHelper(message, true, "UTF-8");
             customizer.accept(helper);
-            message.setFrom(emailProperties.getFrom() == null ? properties.getUsername() : emailProperties.getFrom());
+            var from = emailProperties.getFrom() == null ? properties.getUsername() : emailProperties.getFrom();
+            if (emailProperties.getSenderName() != null) {
+                helper.setFrom(from, emailProperties.getSenderName());
+            } else {
+                helper.setFrom(from);
+            }
             sender.send(message);
-        } catch (MessagingException e) {
+        } catch (MessagingException | UnsupportedEncodingException e) {
             throw new MailSendException(Map.of(message, e));
         }
     }

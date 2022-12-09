@@ -7,4 +7,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("spring.mail")
 public class EmailProperties {
     private String from;
+    private String senderName = null;
 }
