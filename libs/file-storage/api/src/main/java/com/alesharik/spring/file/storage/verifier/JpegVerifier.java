@@ -1,9 +1,6 @@
 package com.alesharik.spring.file.storage.verifier;
 
 import com.alesharik.spring.file.storage.FileTypeVerifier;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +13,6 @@ import java.nio.file.Path;
 /**
  * This verifies pass only JPEG images
  */
-@Slf4j
 public class JpegVerifier implements FileTypeVerifier {
     private static final String JPG_EXTENSION = ".jpg";
     private static final String JPEG_EXTENSION = ".jpeg";
@@ -32,8 +28,7 @@ public class JpegVerifier implements FileTypeVerifier {
         } catch (EOFException e) {
             return false;
         } catch (IOException e) {
-            log.error("Exception happened while checking if file is JPEG", e);
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
