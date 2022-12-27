@@ -1,34 +1,16 @@
 package com.alesharik.spring.common.minio.exception;
 
-import lombok.RequiredArgsConstructor;
-import org.zalando.problem.Status;
-import org.zalando.problem.StatusType;
-import org.zalando.problem.ThrowableProblem;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.ErrorResponseException;
 
 import java.net.URI;
 
-@RequiredArgsConstructor
-public class MinioStorageException extends ThrowableProblem {
+public class MinioStorageException extends ErrorResponseException {
     public static final URI TYPE = URI.create("https://spring.alesharik.com/docs/error/storage/minio/internal-error");
-    private final Exception exception;
 
-    @Override
-    public URI getType() {
-        return TYPE;
-    }
-
-    @Override
-    public String getTitle() {
-        return "Minio internal error";
-    }
-
-    @Override
-    public String getMessage() {
-        return exception.getMessage();
-    }
-
-    @Override
-    public StatusType getStatus() {
-        return Status.INTERNAL_SERVER_ERROR;
+    public MinioStorageException(Exception exception) {
+        super(HttpStatus.INTERNAL_SERVER_ERROR, exception);
+        setType(TYPE);
+        setTitle("Minio internal error");
     }
 }
