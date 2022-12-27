@@ -7,7 +7,6 @@ dependencies {
     implementation(libs.spring.boot)
     implementation(libs.spring.web)
     implementation(libs.spring.boot.autoconfigure)
-    implementation(libs.bundles.springdoc)
     implementation(libs.okhttp) {
         isForce = true
     }
