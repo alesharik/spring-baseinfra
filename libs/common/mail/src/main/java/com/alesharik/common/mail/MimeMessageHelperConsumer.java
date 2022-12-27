@@ -1,8 +1,7 @@
 package com.alesharik.common.mail;
 
+import jakarta.mail.MessagingException;
 import org.springframework.mail.javamail.MimeMessageHelper;
-
-import javax.mail.MessagingException;
 
 @FunctionalInterface
 public interface MimeMessageHelperConsumer {
