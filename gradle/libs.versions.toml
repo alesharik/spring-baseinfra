@@ -49,6 +49,8 @@ problems-web = { group = "org.zalando", name = "problem-spring-web-starter", ver
 thymeleaf-core = { group = "org.thymeleaf", name = "thymeleaf", version.ref = "thymeleaf" }
 thymeleaf-spring = { group = "org.thymeleaf", name = "thymeleaf-spring5", version.ref = "thymeleaf" }
 
+slf4j = { group = "org.slf4j", name = "slf4j-api" }
+
 [bundles]
 springdoc = ["springdoc-ui", "springdoc-mvc", "springdoc-kotlin"]
 thymeleaf = ["thymeleaf-core", "thymeleaf-spring"]
