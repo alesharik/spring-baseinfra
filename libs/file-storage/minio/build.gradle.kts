@@ -8,6 +8,5 @@ dependencies {
     implementation(libs.spring.web)
     implementation(libs.spring.boot.autoconfigure)
     implementation(libs.slf4j)
-    implementation(libs.bundles.springdoc)
     testImplementation(libs.spring.starter.test)
 }

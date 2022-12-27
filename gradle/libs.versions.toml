@@ -7,7 +7,6 @@ spring-boot = "3.0.1"
 
 assertj = "3.23.1"
 mockito = "4.9.0"
-springdoc = "2.0.0"
 tika = "2.6.0"
 minio = "8.4.6"
 okhttp = "4.10.0"
@@ -38,10 +37,6 @@ bouncycastle = { group = "org.bouncycastle", name = "bcpkix-jdk15on", version.re
 assertj = { group = "org.assertj", name = "assertj-core", version.ref = "assertj" }
 mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 
-springdoc-ui = { group = "org.springdoc", name = "springdoc-openapi-ui", version.ref = "springdoc" }
-springdoc-mvc = { group = "org.springdoc", name = "springdoc-openapi-webmvc-core", version.ref = "springdoc" }
-springdoc-kotlin = { group = "org.springdoc", name = "springdoc-openapi-kotlin", version.ref = "springdoc" }
-
 swagger-annotations = { group = "io.swagger.core.v3", name = "swagger-annotations", version.ref = "swagger" }
 
 thymeleaf-core = { group = "org.thymeleaf", name = "thymeleaf", version.ref = "thymeleaf" }
@@ -50,5 +45,4 @@ thymeleaf-spring = { group = "org.thymeleaf", name = "thymeleaf-spring5", versio
 slf4j = { group = "org.slf4j", name = "slf4j-api" }
 
 [bundles]
-springdoc = ["springdoc-ui", "springdoc-mvc", "springdoc-kotlin"]
 thymeleaf = ["thymeleaf-core", "thymeleaf-spring"]
