@@ -1,15 +1,18 @@
 package com.alesharik.appversion.service.domain;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.lang.NonNull;
 
 import java.util.List;
 
 public record VersionResult(
-        @Schema(description = "Action", required = true)
+        @NonNull
+        @Schema(description = "Action")
         VersionAction action,
         @Schema(description = "Next app version, if has any")
         String nextVersion,
-        @Schema(description = "App feature flags", required = true)
+        @NonNull
+        @Schema(description = "App feature flags")
         List<FeatureFlag> featureFlags
 ) {
 }
