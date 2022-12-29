@@ -1,4 +1,4 @@
-package com.alesharik.user.authentication.apple.exception
+package com.alesharik.user.authentication.exceptions
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.ErrorResponseException
@@ -12,6 +12,6 @@ class EmailNotVerifiedException : ErrorResponseException(HttpStatus.BAD_REQUEST)
     }
 
     companion object {
-        val TYPE = URI.create("https://spring.alesharik.com/docs/error/auth/apple/email-not-verified")
+        val TYPE = URI.create("https://spring.alesharik.com/docs/error/auth/email-not-verified")
     }
 }

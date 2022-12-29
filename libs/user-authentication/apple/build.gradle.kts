@@ -1,6 +1,7 @@
 version = "1.1.1"
 
 dependencies {
+    api(project(":user-authentication-exceptions"))
     implementation(libs.swagger.annotations)
     implementation(libs.spring.web)
     implementation(libs.spring.security.jose)

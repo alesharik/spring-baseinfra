@@ -1,8 +1,8 @@
 package com.alesharik.user.authentication.apple
 
 import com.alesharik.user.authentication.apple.domain.AppleIdToken
-import com.alesharik.user.authentication.apple.exception.BadTokenException
-import com.alesharik.user.authentication.apple.exception.EmailNotVerifiedException
+import com.alesharik.user.authentication.exceptions.BadIdTokenException
+import com.alesharik.user.authentication.exceptions.EmailNotVerifiedException
 import com.nimbusds.jose.JWSAlgorithm
 import com.nimbusds.jose.jwk.source.RemoteJWKSet
 import com.nimbusds.jose.proc.JWSAlgorithmFamilyJWSKeySelector
@@ -45,7 +45,7 @@ class AppleIdTokenVerifier(audience: Set<String>, private val verifiedEmailRequi
             }
             return idToken
         } catch (e: JwtException) {
-            throw BadTokenException()
+            throw BadIdTokenException("apple")
         }
     }
 }
