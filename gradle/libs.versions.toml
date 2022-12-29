@@ -27,12 +27,14 @@ spring-configuration-processor = { group = "org.springframework.boot", name = "s
 spring-boot = { group = "org.springframework.boot", name = "spring-boot" }
 spring-boot-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure" }
 spring-web = { group = "org.springframework", name = "spring-web" }
+spring-security-jose = { group = "org.springframework.security", name = "spring-security-oauth2-jose" }
 
 lombok = { group = "org.projectlombok", name = "lombok" }
 tika-core = { group = "org.apache.tika", name = "tika-core", version.ref = "tika" }
 minio = { group = "io.minio", name = "minio", version.ref = "minio" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 bouncycastle = { group = "org.bouncycastle", name = "bcpkix-jdk15on", version.ref = "bouncycastle" }
+nimbus-jwt = { group = "com.nimbusds", name = "nimbus-jose-jwt" }
 
 assertj = { group = "org.assertj", name = "assertj-core", version.ref = "assertj" }
 mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
