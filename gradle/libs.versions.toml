@@ -35,7 +35,7 @@ tika-core = { group = "org.apache.tika", name = "tika-core", version.ref = "tika
 minio = { group = "io.minio", name = "minio", version.ref = "minio" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 bouncycastle = { group = "org.bouncycastle", name = "bcpkix-jdk15on", version.ref = "bouncycastle" }
-nimbus-jwt = { group = "com.nimbusds", name = "nimbus-jose-jwt" }
+nimbus-jwt = { group = "com.nimbusds", name = "nimbus-jose-jwt", version.ref = "nimbus-jwt" }
 
 assertj = { group = "org.assertj", name = "assertj-core", version.ref = "assertj" }
 mockito = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
