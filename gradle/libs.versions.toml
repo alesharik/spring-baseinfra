@@ -14,6 +14,7 @@ sentry = "6.9.1"
 swagger = "2.2.7"
 thymeleaf = "3.1.1.RELEASE"
 bouncycastle = "1.70"
+nimbus-jwt = "9.24.4"
 
 [libraries]
 spring-boot-dependencies = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "spring-boot" }
