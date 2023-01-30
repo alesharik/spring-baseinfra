@@ -35,7 +35,6 @@ public class InMemoryFileStorage implements FileStorage {
             if (!request.isIgnoreExisting() && files.containsKey(key))
                 throw new FileAlreadyExistsException();
             var data = request.getFile().getBytes();
-            files.put(key, data);
             if (request.getVerifier() != null) {
                 var tmp = Files.createTempFile(name, null);
                 try {
@@ -47,6 +46,12 @@ public class InMemoryFileStorage implements FileStorage {
                     Files.delete(tmp);
                 }
             }
+            if (request.getConverter() != null) {
+                data = request.getConverter()
+                        .convert(new ByteArrayInputStream(data))
+                        .readAllBytes();
+            }
+            files.put(key, data);
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }

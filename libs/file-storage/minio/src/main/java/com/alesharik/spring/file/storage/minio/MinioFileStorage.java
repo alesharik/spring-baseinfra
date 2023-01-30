@@ -15,6 +15,7 @@ import org.springframework.lang.NonNull;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.UUID;
 
 @Slf4j
@@ -47,6 +48,20 @@ public class MinioFileStorage implements FileStorage {
                 if (!request.getVerifier().verifyFile(file, request.getFile())) {
                     throw new FileVerificationFailedException();
                 }
+                if (request.getConverter() != null) {
+                    Path newFile = Files.createTempFile("alesharik-spring-minio", ".tmp");
+                    try {
+                        try (var in = Files.newInputStream(file)) {
+                            try (var out = Files.newOutputStream(newFile, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE)) {
+                                request.getConverter().convert(in).transferTo(out);
+                            }
+                        }
+                    } catch (Throwable e) {
+                        Files.deleteIfExists(newFile);
+                    }
+                    Files.deleteIfExists(file);
+                    file = newFile;
+                }
                 client.putFile(properties.getBucket(), object, file);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -60,7 +75,12 @@ public class MinioFileStorage implements FileStorage {
                 }
             }
         } else {
-            client.putMultipartFile(properties.getBucket(), object, request.getFile());
+            if (request.getConverter() == null) {
+                client.putMultipartFile(properties.getBucket(), object, request.getFile());
+            } else {
+                var convertedFile = new ConvertedMultipartFile(request.getFile(), request.getConverter());
+                client.putMultipartFile(properties.getBucket(), object, convertedFile);
+            }
         }
         return name;
     }
