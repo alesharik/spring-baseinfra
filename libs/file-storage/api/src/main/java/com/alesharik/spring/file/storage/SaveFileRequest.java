@@ -3,6 +3,7 @@ package com.alesharik.spring.file.storage;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -43,5 +44,12 @@ public final class SaveFileRequest {
     /**
      * Optional verifier to check file constraints (as example - check if file is JPEG)
      */
+    @Nullable
     private final FileTypeVerifier verifier;
+
+    /**
+     * Optional converter to convert file to target format after verification
+     */
+    @Nullable
+    private final FileConverter converter;
 }

@@ -12,6 +12,7 @@ import org.springframework.lang.NonNull;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -32,13 +33,38 @@ public class LocalSelfHostedFileStorage implements FileStorage {
         try {
             if (!request.isIgnoreExisting() && Files.exists(path))
                 throw new FileAlreadyExistsException();
+
+            var inputStream = request.getFile().getInputStream();
+            Path tmpFile = null;
+            if (request.getVerifier() != null) {
+                var tmp = Files.createTempFile(name, null);
+                try {
+                    request.getFile().transferTo(path);
+                    if (!request.getVerifier().verifyFile(tmp, request.getFile())) {
+                        Files.delete(tmp);
+                        throw new FileVerificationFailedException();
+                    }
+                    inputStream.close();
+                    inputStream = Files.newInputStream(tmp);
+                    tmpFile = tmp;
+                } catch (Throwable e) {
+                    Files.deleteIfExists(tmp);
+                    throw e;
+                }
+            }
+
+            if (request.getConverter() != null) {
+                var newStream = request.getConverter().convert(inputStream);
+                inputStream.close();
+                inputStream = newStream;
+            }
             if (!Files.exists(path))
                 Files.createFile(path);
-            request.getFile().transferTo(path);
-            if (request.getVerifier() != null && !request.getVerifier().verifyFile(path, request.getFile())) {
-                Files.delete(path);
-                throw new FileVerificationFailedException();
-            }
+            inputStream.transferTo(Files.newOutputStream(path, StandardOpenOption.TRUNCATE_EXISTING));
+            inputStream.close();
+
+            if (tmpFile != null)
+                Files.deleteIfExists(tmpFile);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
