@@ -38,4 +38,13 @@ class ImagickImageConverterTest {
             converter.convert(Objects.requireNonNull(classLoader.getResourceAsStream("test.txt")));
         }).isInstanceOf(FileConversionFailedException.class);
     }
+
+    @Test
+    @Timeout(1)
+    void shouldConvertJpgToJpg() {
+        var classLoader = ImagickImageConverter.class.getClassLoader();
+        var converter = new ImagickImageConverter("jpg");
+        var converted = converter.convert(Objects.requireNonNull(classLoader.getResourceAsStream("image.jpg")));
+        assertThat(converted).hasSameContentAs(classLoader.getResourceAsStream("image.jpg"));
+    }
 }
