@@ -58,6 +58,7 @@ public class MinioFileStorage implements FileStorage {
                         }
                     } catch (Throwable e) {
                         Files.deleteIfExists(newFile);
+                        throw e;
                     }
                     Files.deleteIfExists(file);
                     file = newFile;
