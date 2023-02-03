@@ -41,12 +41,7 @@ public class JpegVerifier implements FileTypeVerifier {
         try (var raf = new RandomAccessFile(file, "r")) {
             byte[] tmp = new byte[3];
             raf.readFully(tmp);
-            if (tmp[0] != (byte) 0xFF || tmp[1] != (byte) 0xD8 || tmp[2] != (byte) 0xFF)
-                return false;
-            raf.seek(raf.length() - 2);
-            byte[] tmp1 = new byte[2];
-            raf.readFully(tmp1);
-            return tmp1[0] == (byte) 0xFF && tmp1[1] == (byte) 0xD9;
+            return tmp[0] == (byte) 0xFF || tmp[1] == (byte) 0xD8 || tmp[2] == (byte) 0xFF;
         }
     }
 }
