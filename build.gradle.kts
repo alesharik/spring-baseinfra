@@ -160,7 +160,7 @@ subprojects {
             if (user != null && pass != null) {
                 maven {
                     name = "Central"
-                    url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+                    url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
                     credentials {
                         username = user
                         password = pass
