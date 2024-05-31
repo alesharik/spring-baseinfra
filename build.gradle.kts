@@ -136,7 +136,7 @@ subprojects {
             }
             if (response == 200) {
                 gradle.taskGraph.allTasks.find {
-                    it.project == project && it.name == "publishGprPublicationToCentralPackagesRepository"
+                    it.project == project && it.name == "publishGprPublicationToCentralRepository"
                 }?.enabled = false
             }
         }
@@ -160,7 +160,7 @@ subprojects {
             if (user != null && pass != null) {
                 maven {
                     name = "Central"
-                    url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                    url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
                     credentials {
                         username = user
                         password = pass
@@ -177,4 +177,5 @@ subprojects {
     }
 
     tasks.findByName("publishGprPublicationToGitHubPackagesRepository")?.dependsOn("checkForExistingGithubArtifact")
+    tasks.findByName("publishGprPublicationToCentralRepository")?.dependsOn("checkForExistingCentralArtifact")
 }
