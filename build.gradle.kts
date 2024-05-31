@@ -91,7 +91,7 @@ subprojects {
 
     val token = localProperties["gpr.token"] as String? ?: System.getenv("GITHUB_TOKEN")
 
-    task("checkForExistingArtifact") {
+    task("checkForExistingGithubArtifact") {
         group = "publishing"
         doLast {
             val url =
@@ -116,6 +116,32 @@ subprojects {
         }
     }
 
+
+    task("checkForExistingCentralArtifact") {
+        group = "publishing"
+        doLast {
+            val url =
+                "https://repo1.maven.org/maven2/com/alesharik/spring/${project.name}/${project.version}/${project.name}-${project.version}.pom"
+            val client = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(20))
+                .build()
+            val request = HttpRequest.newBuilder()
+                .method("HEAD", HttpRequest.BodyPublishers.noBody())
+                .uri(URI.create(url))
+                .header("Authorization", "Bearer $token")
+                .build()
+            val response = client.send(request, HttpResponse.BodyHandlers.discarding()).statusCode()
+            if (response == 401) {
+                throw RuntimeException("Unauthorized gh maven user. Please provide valid token")
+            }
+            if (response == 200) {
+                gradle.taskGraph.allTasks.find {
+                    it.project == project && it.name == "publishGprPublicationToCentralPackagesRepository"
+                }?.enabled = false
+            }
+        }
+    }
+
     publishing {
         repositories {
             maven {
@@ -133,8 +159,8 @@ subprojects {
             val pass = System.getenv("CI_PASSWORD")
             if (user != null && pass != null) {
                 maven {
-                    name = "Nexus"
-                    url = uri("https://nexus.alesharik.com/repository/maven-releases/")
+                    name = "Central"
+                    url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
                     credentials {
                         username = user
                         password = pass
@@ -150,5 +176,6 @@ subprojects {
         }
     }
 
-    tasks.findByName("publishGprPublicationToGitHubPackagesRepository")?.dependsOn("checkForExistingArtifact")
+    tasks.findByName("publishGprPublicationToGitHubPackagesRepository")?.dependsOn("checkForExistingGithubArtifact")
+    tasks.findByName("publishGprPublicationToCentralPackagesRepository")?.dependsOn("checkForExistingCentralArtifact")
 }
