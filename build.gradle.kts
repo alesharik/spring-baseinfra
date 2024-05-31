@@ -136,7 +136,7 @@ subprojects {
             }
             if (response == 200) {
                 gradle.taskGraph.allTasks.find {
-                    it.project == project && it.name == "publishCentralPublicationToCentralPackagesRepository"
+                    it.project == project && it.name == "publishGprPublicationToCentralPackagesRepository"
                 }?.enabled = false
             }
         }
@@ -160,7 +160,7 @@ subprojects {
             if (user != null && pass != null) {
                 maven {
                     name = "Central"
-                    url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+                    url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
                     credentials {
                         username = user
                         password = pass
@@ -173,14 +173,8 @@ subprojects {
                 groupId = "com.alesharik.spring"
                 from(components["java"])
             }
-
-            create<MavenPublication>("central") {
-                groupId = "com.alesharik"
-                from(components["java"])
-            }
         }
     }
 
     tasks.findByName("publishGprPublicationToGitHubPackagesRepository")?.dependsOn("checkForExistingGithubArtifact")
-    tasks.findByName("publishCentralPublicationToCentralPackagesRepository")?.dependsOn("checkForExistingCentralArtifact")
 }
