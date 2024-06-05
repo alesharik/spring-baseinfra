@@ -50,6 +50,7 @@ abstract class AbstractVerificationCodeService<T: VerificationCodeEntityBase, R>
         }
         // code is valid and not expired? Auth successful
         auth.verified = true
+        auth.verificationCode = null
         saveAuth(auth)
     }
 
