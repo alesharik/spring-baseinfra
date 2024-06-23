@@ -5,6 +5,8 @@ import com.alesharik.spring.file.storage.exception.FileConversionFailedException
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.lang.NonNull;
 
@@ -13,6 +15,7 @@ import java.io.InputStream;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @RequiredArgsConstructor
 public class ImagickImageConverter implements FileConverter {
     private final String targetFormat;
@@ -42,11 +45,14 @@ public class ImagickImageConverter implements FileConverter {
         command.getOutputStream().close();
     }
 
+    @SneakyThrows
     private void checkSuccessful(Process command) throws InterruptedException {
         if (!command.waitFor(timeout.toMillis(), TimeUnit.MILLISECONDS)) {
+            log.warn("Imagemagick failed with timeout: {}\nerror: {}", new String(command.getInputStream().readAllBytes()), new String(command.getErrorStream().readAllBytes()));
             throw new FileConversionFailedException();
         }
         if (command.exitValue() != 0) {
+            log.debug("Imagemagick failed: {}\nerror: {}", new String(command.getInputStream().readAllBytes()), new String(command.getErrorStream().readAllBytes()));
             throw new FileConversionFailedException();
         }
     }
