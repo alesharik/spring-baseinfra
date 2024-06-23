@@ -105,6 +105,11 @@ public class MinioFileStorage implements FileStorage {
         client.deleteObject(properties.getBucket(), object);
     }
 
+    public void deleteFileUnsafe(@NonNull String type, @NonNull String itemId, @NonNull String id) {
+        var object = parseObjectUnsafe(type, itemId, id);
+        client.deleteObject(properties.getBucket(), object);
+    }
+
     @Override
     @NonNull
     public String getLink(@NonNull String type, @NonNull String itemId, @NonNull String filename) {
@@ -120,6 +125,11 @@ public class MinioFileStorage implements FileStorage {
     private String parseObject(@NonNull String type, @NonNull String itemId, @NonNull String id) {
         if (id.indexOf(UNIX_SEPARATOR) != -1 || id.indexOf(WINDOWS_SEPARATOR) != -1)
             throw new FileNotFoundException();
+        return type + "/" + itemId + "/" + id;
+    }
+
+
+    private String parseObjectUnsafe(@NonNull String type, @NonNull String itemId, @NonNull String id) {
         return type + "/" + itemId + "/" + id;
     }
 
