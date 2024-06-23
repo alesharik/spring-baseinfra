@@ -29,6 +29,11 @@ public class MinioFileStorage implements FileStorage {
     @Override
     @NonNull
     public String saveFile(@NonNull SaveFileRequest request) {
+        return saveFileAdvanced(request).name();
+    }
+
+    @NonNull
+    public SavedFile saveFileAdvanced(@NonNull SaveFileRequest request) {
         var name = request.getFilenameOverride() != null ? request.getFilenameOverride()
                 : (request.getFile().getOriginalFilename() == null || request.getFile().getOriginalFilename().isBlank())
                 ? UUID.randomUUID() + ".dat"
@@ -63,7 +68,8 @@ public class MinioFileStorage implements FileStorage {
                     Files.deleteIfExists(file);
                     file = newFile;
                 }
-                client.putFile(properties.getBucket(), object, file);
+                com.alesharik.spring.common.minio.SavedFile saved = client.putFile(properties.getBucket(), object, file);
+                return new SavedFile(name, saved.contentType(), saved.etag());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } finally {
@@ -77,13 +83,14 @@ public class MinioFileStorage implements FileStorage {
             }
         } else {
             if (request.getConverter() == null) {
-                client.putMultipartFile(properties.getBucket(), object, request.getFile());
+                com.alesharik.spring.common.minio.SavedFile saved = client.putMultipartFile(properties.getBucket(), object, request.getFile());
+                return new SavedFile(name, saved.contentType(), saved.etag());
             } else {
                 var convertedFile = new ConvertedMultipartFile(request.getFile(), request.getConverter());
-                client.putMultipartFile(properties.getBucket(), object, convertedFile);
+                com.alesharik.spring.common.minio.SavedFile saved = client.putMultipartFile(properties.getBucket(), object, convertedFile);
+                return new SavedFile(name, saved.contentType(), saved.etag());
             }
         }
-        return name;
     }
 
     @Override

@@ -58,16 +58,18 @@ public class MinioClientTemplate {
      * @param object object name
      * @param file file to put
      */
-    public void putFile(@NonNull String bucket, @NonNull String object, @NonNull Path file) {
+    public SavedFile putFile(@NonNull String bucket, @NonNull String object, @NonNull Path file) {
         try {
-            client.uploadObject(
+            String contentType = tika.detect(file);
+            ObjectWriteResponse response = client.uploadObject(
                     UploadObjectArgs.builder()
                             .bucket(bucket)
                             .object(object)
                             .filename(file.toString())
-                            .contentType(tika.detect(file))
+                            .contentType(contentType)
                             .build()
             );
+            return new SavedFile(response.etag(), contentType);
         } catch (ErrorResponseException | InsufficientDataException | InternalException | InvalidKeyException | InvalidResponseException | IOException | NoSuchAlgorithmException | ServerException | XmlParserException e) {
             log.error("Error occurred while putting object", e);
             Sentry.captureException(e);
@@ -109,7 +111,7 @@ public class MinioClientTemplate {
      * @param object object name
      * @param file file to put
      */
-    public void putMultipartFile(@NonNull String bucket, @NonNull String object, @NonNull MultipartFile file) {
+    public SavedFile putMultipartFile(@NonNull String bucket, @NonNull String object, @NonNull MultipartFile file) {
         try {
             var args = PutObjectArgs.builder()
                     .bucket(bucket)
@@ -120,7 +122,9 @@ public class MinioClientTemplate {
             } else {
                 args.contentType(tika.detect(file.getOriginalFilename()));
             }
-            client.putObject(args.build());
+            PutObjectArgs built = args.build();
+            ObjectWriteResponse response = client.putObject(built);
+            return new SavedFile(response.etag(), built.contentType());
         } catch (ErrorResponseException | InsufficientDataException | InternalException | InvalidKeyException | InvalidResponseException | IOException | NoSuchAlgorithmException | ServerException | XmlParserException e) {
             log.error("Error occurred while putting object", e);
             Sentry.captureException(e);
